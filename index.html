@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merve</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#1e1f2f,#2c2f4a);
+    font-family:'Playfair Display', serif;
+    color:white;
+    overflow:hidden;
+}
+
+.container{
+    text-align:center;
+    position:relative;
+    z-index:2;
+}
+
+h1{
+    font-size:60px;
+    font-weight:600;
+    letter-spacing:3px;
+}
+
+p{
+    font-size:24px;
+    min-height:30px;
+}
+
+button{
+    padding:12px 28px;
+    margin:12px;
+    border:none;
+    border-radius:30px;
+    font-size:17px;
+    cursor:pointer;
+    transition:0.3s;
+    font-family:'Playfair Display', serif;
+}
+
+.loveBtn{
+    background:white;
+    color:#1e1f2f;
+}
+
+.kissBtn{
+    background:#ff4f81;
+    color:white;
+}
+
+button:hover{
+    transform:scale(1.15);
+}
+
+.message{
+    margin-top:20px;
+    font-size:22px;
+}
+
+/* Kalpler */
+.heart{
+    position:absolute;
+    font-size:16px;
+    animation:fall linear forwards;
+    opacity:0.8;
+}
+
+@keyframes fall{
+    from{transform:translateY(-10vh);}
+    to{transform:translateY(110vh);}
+}
+
+/* Öpücük */
+.kiss{
+    position:absolute;
+    font-size:32px;
+    animation:explode 2.5s ease-out forwards;
+}
+
+@keyframes explode{
+    0%{transform:scale(0.5);opacity:0;}
+    30%{transform:scale(1.2);opacity:1;}
+    100%{transform:scale(1);opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Merve</h1>
+    <p id="text"></p>
+
+    <button class="loveBtn" id="loveBtn">Seni Seviyorum</button>
+    <button class="kissBtn" id="kissBtn">Öpücük Gönder</button>
+
+    <div class="message" id="message"></div>
+</div>
+
+<script>
+// Yazı efekti
+const messageText = "Sevgililer Günün Kutlu Olsun.";
+let i = 0;
+
+function typeWriter(){
+    if(i < messageText.length){
+        document.getElementById("text").innerHTML += messageText.charAt(i);
+        i++;
+        setTimeout(typeWriter,40);
+    }
+}
+typeWriter();
+
+// Kalp yağmuru
+setInterval(function(){
+    for(let j=0;j<3;j++){
+        const heart=document.createElement("div");
+        heart.className="heart";
+        heart.innerHTML="❤";
+        heart.style.left=Math.random()*100+"vw";
+        heart.style.animationDuration=(Math.random()*3+4)+"s";
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(),7000);
+    }
+},400);
+
+// Love butonu
+document.getElementById("loveBtn").addEventListener("click",function(){
+    document.getElementById("message").innerText="MERVE SENİ HARBİ SEVİYORUM AMA BENLE KONUŞSAN SANA DAHA ÇOK AŞIK OLABİLİRİM GİBİ(ZATEN İLK GÜNKÜ GİBİ AŞIĞIM AMA OLSUN).";
+});
+
+// FULL SCREEN RANDOM KISS ATTACK 💋
+document.getElementById("kissBtn").addEventListener("click",function(){
+
+    const total = 120; // ekranı dolduracak miktar
+
+    for(let k=0;k<total;k++){
+        const kiss=document.createElement("div");
+        kiss.className="kiss";
+        kiss.innerHTML="💋";
+
+        // random her yer
+        kiss.style.left=Math.random()*100+"vw";
+        kiss.style.top=Math.random()*100+"vh";
+
+        document.body.appendChild(kiss);
+
+        setTimeout(()=>kiss.remove(),2500);
+    }
+});
+</script>
+
+</body>
+</html>
