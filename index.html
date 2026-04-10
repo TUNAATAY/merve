@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Merve Recovery Protocol</title>
+    <title>Recovery Protocol: Active</title>
     <style>
-        /* Klas bir font çekiyoruz */
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300&display=swap');
+        /* Fütüristik ve ince fontlar */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;1,300&display=swap');
 
         body {
             margin: 0;
@@ -16,129 +16,183 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            /* Göz yormayan Derin Okyanus Mavisi (Merve'nin sevdiği ton) */
-            background: radial-gradient(circle at center, #1a365d 0%, #0a192f 100%);
+            /* Derin Gece Mavisi Karanlık Arka Plan */
+            background-color: #030811;
+            background-image: radial-gradient(circle at bottom, #0d2240 0%, #02050a 100%);
             font-family: 'Montserrat', sans-serif;
             overflow: hidden;
-            color: #e2e8f0;
         }
 
-        /* Çiçeğin nabız gibi atması için taşıyıcı kutu */
-        .flower-container {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            animation: breath 4s ease-in-out infinite;
-        }
-
-        /* Kendi etrafında yavaşça dönme animasyonu */
-        .flower {
-            position: relative;
+        /* Uçuşan Mavi Toz Zerrecikleri (Particles) Alanı */
+        #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            animation: spin 40s linear infinite;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        /* Profesyonel, cam efekti verilmiş yapraklar */
-        .petal {
+        .particle {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 35px;
-            height: 110px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(180,215,255,0.2) 100%);
-            border-radius: 50px 50px 0 0;
-            transform-origin: bottom center;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-        }
-
-        /* Matematiksel olarak kusursuz Altın Oran dizilimi */
-        .petal:nth-child(1) { transform: translate(-50%, -100%) rotate(0deg); }
-        .petal:nth-child(2) { transform: translate(-50%, -100%) rotate(45deg); }
-        .petal:nth-child(3) { transform: translate(-50%, -100%) rotate(90deg); }
-        .petal:nth-child(4) { transform: translate(-50%, -100%) rotate(135deg); }
-        .petal:nth-child(5) { transform: translate(-50%, -100%) rotate(180deg); }
-        .petal:nth-child(6) { transform: translate(-50%, -100%) rotate(225deg); }
-        .petal:nth-child(7) { transform: translate(-50%, -100%) rotate(270deg); }
-        .petal:nth-child(8) { transform: translate(-50%, -100%) rotate(315deg); }
-
-        /* Çiçeğin altın sarısı parlayan merkezi */
-        .center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 45px;
-            height: 45px;
-            background: radial-gradient(circle, #fde047 0%, #d97706 100%);
+            bottom: -10px;
+            background: #00f2ff;
             border-radius: 50%;
-            box-shadow: 0 0 25px rgba(251, 191, 36, 0.6);
-            z-index: 10;
-        }
-
-        /* Karizmatik ve darlamayan mesaj paneli */
-        .message-box {
-            margin-top: 60px;
-            text-align: center;
+            filter: drop-shadow(0 0 6px #00f2ff);
             opacity: 0;
-            /* Yazı site açıldıktan 1 saniye sonra yavaşça belirir */
-            animation: fadeIn 3s forwards 1s; 
+            animation: floatUp linear infinite;
         }
 
-        .message-box h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 1.8rem;
+        /* Ana Sahne Konteyneri */
+        .scene {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Neon Bitki ve Kalp SVG'si */
+        .neon-plant {
+            width: 320px;
+            height: 400px;
+            overflow: visible;
+            /* Hafif rüzgar sallantısı */
+            animation: sway 6s ease-in-out infinite;
+        }
+
+        /* Bitki Gövdesi ve Yaprakları (Cyan Glow) */
+        .stem {
+            fill: none;
+            stroke: #00f2ff;
+            stroke-width: 3;
+            stroke-linecap: round;
+            filter: drop-shadow(0 0 10px #00f2ff);
+        }
+
+        .leaf {
+            fill: rgba(0, 242, 255, 0.1);
+            stroke: #00f2ff;
+            stroke-width: 2;
+            filter: drop-shadow(0 0 8px #00f2ff);
+        }
+
+        /* Neon Kalp (Pink/Magenta Glow) */
+        .heart-group {
+            transform-origin: 150px 150px;
+            animation: heartbeat 1.5s infinite ease-in-out;
+        }
+
+        .heart-line {
+            fill: none;
+            stroke: #ff007f;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: drop-shadow(0 0 15px #ff007f);
+        }
+
+        .heart-inner {
+            fill: none;
+            stroke: rgba(255, 0, 127, 0.6);
+            stroke-width: 1.5;
+            filter: drop-shadow(0 0 5px #ff007f);
+        }
+
+        /* Klas Mesaj Paneli */
+        .message-box {
+            text-align: center;
+            color: #ffffff;
+            margin-top: -10px;
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+            opacity: 0;
+            animation: fadeInText 3s forwards 1.5s;
+        }
+
+        .pov-title {
+            font-size: 1.4rem;
             font-weight: 400;
-            letter-spacing: 3px;
-            margin-bottom: 15px;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
         }
 
-        .message-box p {
-            font-size: 1.1rem;
+        .subtext {
+            font-size: 0.95rem;
             font-weight: 300;
+            color: #8ab4f8;
             letter-spacing: 1px;
-            color: #cbd5e1;
+            font-style: italic;
         }
 
-        /* --- Animasyon Tanımlamaları --- */
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
+        /* --- Animasyonlar --- */
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            20% { opacity: 0.5; }
+            80% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
         }
 
-        @keyframes breath {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); } /* Kalp atışı gibi hafifçe büyür */
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.06); filter: brightness(1.3); }
         }
 
-        @keyframes fadeIn {
+        @keyframes sway {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        @keyframes fadeInText {
             100% { opacity: 1; }
         }
     </style>
 </head>
 <body>
 
-    <div class="flower-container">
-        <div class="flower">
-            <div class="petal"></div>
-            <div class="petal"></div>
-            <div class="petal"></div>
-            <div class="petal"></div>
-            <div class="petal"></div>
-            <div class="petal"></div>
-            <div class="petal"></div>
-            <div class="petal"></div>
+    <div id="particles"></div>
+
+    <div class="scene">
+        <svg viewBox="0 0 300 400" class="neon-plant">
+            <path d="M150,400 Q140,250 150,150" class="stem" />
+            
+            <path d="M148,320 Q90,300 80,340 Q120,350 148,330" class="leaf" />
+            <path d="M151,260 Q210,240 220,280 Q180,290 151,270" class="leaf" />
+            <path d="M149,200 Q100,170 90,210 Q120,225 149,210" class="leaf" />
+
+            <g class="heart-group">
+                <path d="M150,150 C150,150 100,110 100,80 A25,25 0 0,1 150,60 A25,25 0 0,1 200,80 C200,110 150,150 150,150 Z" class="heart-line" />
+                <path d="M150,135 C150,135 115,100 115,80 A18,18 0 0,1 150,65 A18,18 0 0,1 185,80 C185,100 150,135 150,135 Z" class="heart-inner" />
+            </g>
+        </svg>
+
+        <div class="message-box">
+            <div class="pov-title">POV: You Can't Afford Flowers</div>
+            <div class="subtext">Şu an her şey yolunda, sadece dinlenmene bak...</div>
         </div>
-        <div class="center"></div>
     </div>
 
-    <div class="message-box">
-        <h1>Mavinin Huzuru Seninle Olsun</h1>
-        <p>Şu an her şey yolunda, sadece dinlenmene bak...</p>
-    </div>
+    <script>
+        const particleContainer = document.getElementById('particles');
+        const particleCount = 35; // Ekranda aynı anda uçuşan toz sayısı
+
+        for (let i = 0; i < particleCount; i++) {
+            let p = document.createElement('div');
+            p.className = 'particle';
+            // Rastgele yatay pozisyon
+            p.style.left = Math.random() * 100 + 'vw';
+            // Rastgele uçuş süresi (7 ile 14 saniye arası)
+            p.style.animationDuration = (Math.random() * 7 + 7) + 's';
+            // Rastgele başlama gecikmesi
+            p.style.animationDelay = (Math.random() * 5) + 's';
+            // Rastgele boyut (2px ile 5px arası)
+            let size = Math.random() * 3 + 2;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+            
+            particleContainer.appendChild(p);
+        }
+    </script>
 
 </body>
 </html>
