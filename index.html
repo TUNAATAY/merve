@@ -1,164 +1,144 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Merve</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merve Recovery Protocol</title>
+    <style>
+        /* Klas bir font çekiyoruz */
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300&display=swap');
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* Göz yormayan Derin Okyanus Mavisi (Merve'nin sevdiği ton) */
+            background: radial-gradient(circle at center, #1a365d 0%, #0a192f 100%);
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            color: #e2e8f0;
+        }
 
-<style>
-body{
-    margin:0;
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(135deg,#1e1f2f,#2c2f4a);
-    font-family:'Playfair Display', serif;
-    color:white;
-    overflow:hidden;
-}
+        /* Çiçeğin nabız gibi atması için taşıyıcı kutu */
+        .flower-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: breath 4s ease-in-out infinite;
+        }
 
-.container{
-    text-align:center;
-    position:relative;
-    z-index:2;
-}
+        /* Kendi etrafında yavaşça dönme animasyonu */
+        .flower {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            animation: spin 40s linear infinite;
+        }
 
-h1{
-    font-size:60px;
-    font-weight:600;
-    letter-spacing:3px;
-}
+        /* Profesyonel, cam efekti verilmiş yapraklar */
+        .petal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 35px;
+            height: 110px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(180,215,255,0.2) 100%);
+            border-radius: 50px 50px 0 0;
+            transform-origin: bottom center;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
 
-p{
-    font-size:24px;
-    min-height:30px;
-}
+        /* Matematiksel olarak kusursuz Altın Oran dizilimi */
+        .petal:nth-child(1) { transform: translate(-50%, -100%) rotate(0deg); }
+        .petal:nth-child(2) { transform: translate(-50%, -100%) rotate(45deg); }
+        .petal:nth-child(3) { transform: translate(-50%, -100%) rotate(90deg); }
+        .petal:nth-child(4) { transform: translate(-50%, -100%) rotate(135deg); }
+        .petal:nth-child(5) { transform: translate(-50%, -100%) rotate(180deg); }
+        .petal:nth-child(6) { transform: translate(-50%, -100%) rotate(225deg); }
+        .petal:nth-child(7) { transform: translate(-50%, -100%) rotate(270deg); }
+        .petal:nth-child(8) { transform: translate(-50%, -100%) rotate(315deg); }
 
-button{
-    padding:12px 28px;
-    margin:12px;
-    border:none;
-    border-radius:30px;
-    font-size:17px;
-    cursor:pointer;
-    transition:0.3s;
-    font-family:'Playfair Display', serif;
-}
+        /* Çiçeğin altın sarısı parlayan merkezi */
+        .center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 45px;
+            height: 45px;
+            background: radial-gradient(circle, #fde047 0%, #d97706 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 25px rgba(251, 191, 36, 0.6);
+            z-index: 10;
+        }
 
-.loveBtn{
-    background:white;
-    color:#1e1f2f;
-}
+        /* Karizmatik ve darlamayan mesaj paneli */
+        .message-box {
+            margin-top: 60px;
+            text-align: center;
+            opacity: 0;
+            /* Yazı site açıldıktan 1 saniye sonra yavaşça belirir */
+            animation: fadeIn 3s forwards 1s; 
+        }
 
-.kissBtn{
-    background:#ff4f81;
-    color:white;
-}
+        .message-box h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            font-weight: 400;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+        }
 
-button:hover{
-    transform:scale(1.15);
-}
+        .message-box p {
+            font-size: 1.1rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+            color: #cbd5e1;
+        }
 
-.message{
-    margin-top:20px;
-    font-size:22px;
-}
+        /* --- Animasyon Tanımlamaları --- */
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
 
-/* Kalpler */
-.heart{
-    position:absolute;
-    font-size:16px;
-    animation:fall linear forwards;
-    opacity:0.8;
-}
+        @keyframes breath {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); } /* Kalp atışı gibi hafifçe büyür */
+        }
 
-@keyframes fall{
-    from{transform:translateY(-10vh);}
-    to{transform:translateY(110vh);}
-}
-
-/* Öpücük */
-.kiss{
-    position:absolute;
-    font-size:32px;
-    animation:explode 2.5s ease-out forwards;
-}
-
-@keyframes explode{
-    0%{transform:scale(0.5);opacity:0;}
-    30%{transform:scale(1.2);opacity:1;}
-    100%{transform:scale(1);opacity:0;}
-}
-</style>
+        @keyframes fadeIn {
+            100% { opacity: 1; }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="container">
-    <h1>Merve</h1>
-    <p id="text"></p>
+    <div class="flower-container">
+        <div class="flower">
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+        </div>
+        <div class="center"></div>
+    </div>
 
-    <button class="loveBtn" id="loveBtn">Seni Seviyorum</button>
-    <button class="kissBtn" id="kissBtn">Öpücük Gönder</button>
-
-    <div class="message" id="message"></div>
-</div>
-
-<script>
-// Yazı efekti
-const messageText = "Sevgililer Günün Kutlu Olsun.";
-let i = 0;
-
-function typeWriter(){
-    if(i < messageText.length){
-        document.getElementById("text").innerHTML += messageText.charAt(i);
-        i++;
-        setTimeout(typeWriter,40);
-    }
-}
-typeWriter();
-
-// Kalp yağmuru
-setInterval(function(){
-    for(let j=0;j<3;j++){
-        const heart=document.createElement("div");
-        heart.className="heart";
-        heart.innerHTML="❤";
-        heart.style.left=Math.random()*100+"vw";
-        heart.style.animationDuration=(Math.random()*3+4)+"s";
-        document.body.appendChild(heart);
-        setTimeout(()=>heart.remove(),7000);
-    }
-},400);
-
-// Love butonu
-document.getElementById("loveBtn").addEventListener("click",function(){
-    document.getElementById("message").innerText="MERVE SENİ HARBİ SEVİYORUM AMA BENLE KONUŞSAN SANA DAHA ÇOK AŞIK OLABİLİRİM GİBİ(ZATEN İLK GÜNKÜ GİBİ AŞIĞIM AMA OLSUN).";
-});
-
-// FULL SCREEN RANDOM KISS ATTACK 💋
-document.getElementById("kissBtn").addEventListener("click",function(){
-
-    const total = 120; // ekranı dolduracak miktar
-
-    for(let k=0;k<total;k++){
-        const kiss=document.createElement("div");
-        kiss.className="kiss";
-        kiss.innerHTML="💋";
-
-        // random her yer
-        kiss.style.left=Math.random()*100+"vw";
-        kiss.style.top=Math.random()*100+"vh";
-
-        document.body.appendChild(kiss);
-
-        setTimeout(()=>kiss.remove(),2500);
-    }
-});
-</script>
+    <div class="message-box">
+        <h1>Mavinin Huzuru Seninle Olsun</h1>
+        <p>Şu an her şey yolunda, sadece dinlenmene bak...</p>
+    </div>
 
 </body>
 </html>
