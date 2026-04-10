@@ -2,240 +2,274 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Protocol: Merve_DeepBlue_v4</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocol: Merve_Final_Alpha</title>
     <style>
-        /* HALVIOR OS - PROJECT: BLUE ZEN
-           DESIGN: ULTRA BLUE / NEON CYAN
+        /* HALVIOR OS - CORE ENGINE v5.0
+           THEME: DEEP SPACE / NEON TEAL / GLASSMORPHISM
         */
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500&display=swap');
-
         :root {
-            --deep-blue: #020b16;
-            --ocean-blue: #051c33;
-            --neon-cyan: #00f2ff;
-            --glow-blue: rgba(0, 242, 255, 0.4);
-            --heart-color: #00e5ff; /* Kalbi de mavi/cyan tonuna çektik */
+            --bg-deep: #020617;
+            --neon-teal: #00f2ff;
+            --neon-pink: #ff007f;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --font-main: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
         body, html {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
-            background-color: var(--deep-blue);
-            background-image: radial-gradient(circle at center, var(--ocean-blue) 0%, var(--deep-blue) 100%);
-            font-family: 'Space Grotesk', sans-serif;
-            overflow: hidden;
+            background: var(--bg-deep);
             color: white;
+            font-family: var(--font-main);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        #particleCanvas {
-            position: fixed;
-            top: 0; left: 0;
-            z-index: 1;
-        }
-
-        /* --- 1. LOADING EKRANI --- */
-        #loadingScreen {
+        /* Arka Plan: Hareketli Nebula/Toz Sistemi */
+        #renderCanvas {
             position: fixed;
             inset: 0;
-            background: var(--deep-blue);
+            z-index: -1;
+            filter: blur(1px);
+        }
+
+        /* 1. LAYER: PRO-LOADER */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-deep);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 100;
-            transition: opacity 1s ease;
+            z-index: 1000;
+            transition: all 1.2s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+
+        .loader-ring {
+            width: 150px;
+            height: 150px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--neon-teal);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .loader-heart {
-            width: 100px;
-            height: 100px;
-            fill: var(--neon-cyan);
-            filter: drop-shadow(0 0 15px var(--neon-cyan));
-            animation: pulse 0.8s infinite alternate;
+            width: 40px;
+            height: 40px;
+            fill: var(--neon-pink);
+            filter: drop-shadow(0 0 15px var(--neon-pink));
+            animation: pulse 0.6s infinite alternate;
         }
 
-        /* --- 2. ANA İÇERİK --- */
-        #mainContent {
+        /* 2. LAYER: ANA SAHNE (GLASSMORPHISM) */
+        #main-stage {
             position: relative;
-            width: 100%;
-            height: 100%;
+            width: 90%;
+            max-width: 800px;
+            height: 600px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             opacity: 0;
-            z-index: 10;
-            transition: opacity 2s ease;
+            transform: scale(0.9) translateY(20px);
+            transition: all 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 100;
         }
 
-        /* Merkezi Kalpli Çiçek */
-        .flower-container {
+        /* MERKEZİ ÜNİTE: KALPLİ ÇİÇEK (BIG & NEON) */
+        .art-unit {
             position: relative;
             width: 400px;
-            height: 500px;
-            animation: sway 5s ease-in-out infinite;
+            height: 400px;
+            animation: organicSway 8s ease-in-out infinite;
         }
 
-        .flower-svg {
+        svg#heartFlower {
             width: 100%;
             height: 100%;
             overflow: visible;
         }
 
-        .stem {
+        .stem-pro {
             fill: none;
-            stroke: var(--neon-cyan);
-            stroke-width: 4;
+            stroke: var(--neon-teal);
+            stroke-width: 5;
             stroke-linecap: round;
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
+            filter: drop-shadow(0 0 10px var(--neon-teal));
         }
 
-        .leaf {
-            fill: rgba(0, 242, 255, 0.1);
-            stroke: var(--neon-cyan);
-            stroke-width: 2;
+        .leaf-pro {
+            fill: rgba(0, 242, 255, 0.05);
+            stroke: var(--neon-teal);
+            stroke-width: 1.5;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        /* KALİTELİ BÜYÜK KALP (HİÇ KAYBOLMAZ) */
+        .pro-heart {
+            fill: rgba(255, 0, 127, 0.1);
+            stroke: var(--neon-pink);
+            stroke-width: 4;
+            filter: drop-shadow(0 0 25px var(--neon-pink));
+            transform-origin: center;
+            animation: proPulse 2s infinite ease-in-out;
             opacity: 0;
         }
 
-        /* KALBİ BURAYA SABİTLEDİK - ASLA KAYBOLMAZ */
-        .main-heart {
-            fill: none;
-            stroke: var(--heart-color);
-            stroke-width: 5;
-            filter: drop-shadow(0 0 20px var(--heart-color));
-            transform-origin: 200px 180px;
-            animation: heartbeat 2s infinite ease-in-out;
-        }
-
-        /* Yer Tutucu Yazı Alanı */
-        .message-box {
-            margin-top: 20px;
+        /* EDİTÖRLER İÇİN YAZI ALANI */
+        .ui-content {
+            margin-top: -20px;
             text-align: center;
-            max-width: 500px;
+            padding: 0 40px;
         }
 
-        .editable-text {
-            font-size: 1.1rem;
-            letter-spacing: 2px;
-            color: #8ab4f8;
-            border: 1px dashed rgba(255,255,255,0.1);
-            padding: 10px;
-            cursor: text;
+        .protocol-title {
+            font-size: 0.7rem;
+            color: var(--neon-teal);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 15px;
+            opacity: 0.7;
         }
 
-        /* Dekoratif Çiçekler */
-        .deco-flower {
-            position: absolute;
-            font-size: 20px;
-            opacity: 0.3;
-            filter: blur(1px);
-            animation: float 10s infinite linear;
+        .editable-msg {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: #cbd5e1;
+            line-height: 1.6;
+            cursor: pointer;
+            transition: color 0.3s;
+            outline: none;
         }
 
-        /* ANİMASYONLAR */
-        @keyframes pulse { to { transform: scale(1.15); filter: brightness(1.3); } }
-        @keyframes heartbeat { 
-            0%, 100% { transform: scale(1); } 
-            50% { transform: scale(1.1); filter: brightness(1.5); } 
+        .editable-msg:hover { color: white; }
+
+        /* ANİMASYON KÜTÜPHANESİ */
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { to { transform: scale(1.3); filter: brightness(1.5); } }
+        @keyframes proPulse { 
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(2deg); filter: brightness(1.3); }
         }
-        @keyframes sway {
-            0%, 100% { transform: rotate(-2deg) translateX(-5px); }
-            50% { transform: rotate(2deg) translateX(5px); }
+        @keyframes organicSway {
+            0%, 100% { transform: translateY(0) rotate(-1deg); }
+            50% { transform: translateY(-15px) rotate(1deg); }
         }
-        @keyframes float {
-            from { transform: translateY(100vh) rotate(0deg); }
-            to { transform: translateY(-100vh) rotate(360deg); }
-        }
-        .draw-anim { animation: draw 3s forwards ease-out; }
         @keyframes draw { to { stroke-dashoffset: 0; } }
-        .fade-in { animation: fadeIn 2s forwards 2s; }
-        @keyframes fadeIn { to { opacity: 1; } }
 
+        .active-draw { animation: draw 3s forwards cubic-bezier(0.4, 0, 0.2, 1); }
+        .show { opacity: 1 !important; transform: scale(1) translateY(0) !important; }
     </style>
 </head>
 <body>
 
-    <canvas id="particleCanvas"></canvas>
+    <canvas id="renderCanvas"></canvas>
 
-    <div id="loadingScreen">
-        <svg class="loader-heart" viewBox="0 0 32 32">
-            <path d="M16,28.221c-0.34,0-0.671-0.134-0.916-0.378c-0.244-0.244-12.084-12.084-12.084-17.843c0-4.66,3.791-8.451,8.451-8.451 c1.666,0,3.284,0.485,4.66,1.401c1.376-0.916,2.994-1.401,4.66-1.401c4.66,0,8.451,3.791,8.451,8.451 c0,5.759-11.84,17.599-12.084,17.843C16.671,28.087,16.34,28.221,16,28.221z"/>
-        </svg>
-        <p style="margin-top:20px; letter-spacing:3px;">SİSTEM YÜKLENİYOR...</p>
+    <div id="loader">
+        <div class="loader-ring">
+            <svg class="loader-heart" viewBox="0 0 32 32">
+                <path d="M16,28.221c-0.34,0-0.671-0.134-0.916-0.378c-0.244-0.244-12.084-12.084-12.084-17.843c0-4.66,3.791-8.451,8.451-8.451 c1.666,0,3.284,0.485,4.66,1.401c1.376-0.916,2.994-1.401,4.66-1.401c4.66,0,8.451,3.791,8.451,8.451 c0,5.759-11.84,17.599-12.084,17.843C16.671,28.087,16.34,28.221,16,28.221z"/>
+            </svg>
+        </div>
+        <p style="margin-top: 30px; letter-spacing: 8px; font-size: 0.8rem; font-weight: 200;">INITIALIZING SYSTEM...</p>
     </div>
 
-    <div id="mainContent">
-        <div class="flower-container">
-            <svg class="flower-svg" viewBox="0 0 400 600">
-                <path id="stemPath" class="stem" d="M200,600 C180,450 220,350 200,180" />
+    <div id="main-stage">
+        <div class="art-unit">
+            <svg id="heartFlower" viewBox="0 0 400 400">
+                <path id="stem" class="stem-pro" d="M200,400 C190,300 210,250 200,120" />
                 
-                <path class="leaf fade-in" d="M198,480 Q120,440 110,500 Q160,520 198,490" />
-                <path class="leaf fade-in" d="M202,380 Q290,340 300,400 Q250,420 202,390" />
-                
-                <path class="main-heart fade-in" d="M200,180 C200,180 120,110 120,65 A40,40 0 0,1 200,30 A40,40 0 0,1 280,65 C280,110 200,180 200,180 Z" />
+                <path class="leaf-pro" d="M198,320 Q100,280 90,340 Q150,360 198,330" style="transition-delay: 0.5s;"/>
+                <path class="leaf-pro" d="M202,250 Q300,210 310,270 Q250,290 202,260" style="transition-delay: 0.8s;"/>
+
+                <path id="mainHeart" class="pro-heart" d="M200,120 C200,120 110,60 110,35 A35,35 0 0,1 200,5 A35,35 0 0,1 290,35 C290,60 200,120 200,120 Z" />
+                <path class="pro-heart" d="M200,120 L110,35 M200,120 L290,35 M200,5 L200,120" style="stroke-width:1; opacity:0.3;" />
             </svg>
         </div>
 
-        <div class="message-box fade-in">
-            <div class="editable-text" contenteditable="true">
-                BURAYA İSTEDİĞİN MESAJI YAZ PAŞAM (TIKLA VE DÜZENLE)
+        <div class="ui-content">
+            <div class="protocol-title">Merve_Recovery_v5.0</div>
+            <div class="editable-msg" contenteditable="true" spellcheck="false">
+                Buraya Merve'nin kalbini eritecek o cümleyi yaz kral. Sistemin kalbi senin için atıyor.
             </div>
         </div>
     </div>
 
     <script>
-        const canvas = document.getElementById('particleCanvas');
+        // ENGINE 1: PARÇACIK SİSTEMİ (PRO VERSION)
+        const canvas = document.getElementById('renderCanvas');
         const ctx = canvas.getContext('2d');
-        let w, h, particles = [];
+        let w, h, stars = [];
 
-        function initParticles() {
+        function init() {
             w = canvas.width = window.innerWidth;
             h = canvas.height = window.innerHeight;
-            particles = [];
-            for(let i=0; i<70; i++) particles.push({
-                x: Math.random() * w, y: Math.random() * h,
-                s: Math.random() * 2, v: Math.random() * 0.4 + 0.1,
+            stars = Array.from({length: 100}, () => ({
+                x: Math.random() * w,
+                y: Math.random() * h,
+                z: Math.random() * w,
                 o: Math.random()
-            });
+            }));
         }
 
-        function drawParticles() {
-            ctx.clearRect(0,0,w,h);
-            particles.forEach(p => {
-                p.y -= p.v; if(p.y < 0) p.y = h;
-                ctx.fillStyle = `rgba(0, 242, 255, ${p.o})`;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
+        function draw() {
+            ctx.fillStyle = '#020617';
+            ctx.fillRect(0, 0, w, h);
+            stars.forEach(s => {
+                s.z -= 0.5;
+                if(s.z <= 0) s.z = w;
+                let sx = (s.x - w/2) * (w/s.z) + w/2;
+                let sy = (s.y - h/2) * (w/s.z) + h/2;
+                let size = (1 - s.z/w) * 3;
+                ctx.fillStyle = `rgba(0, 242, 255, ${s.o * (1 - s.z/w)})`;
+                ctx.beginPath();
+                ctx.arc(sx, sy, size, 0, Math.PI*2);
+                ctx.fill();
             });
-            requestAnimationFrame(drawParticles);
+            requestAnimationFrame(draw);
         }
 
+        // ENGINE 2: FLOW CONTROL
         window.addEventListener('load', () => {
-            initParticles();
-            drawParticles();
+            init(); draw();
+            
+            // Profesyonel Loading Süresi
             setTimeout(() => {
-                document.getElementById('loadingScreen').style.opacity = '0';
+                document.getElementById('loader').style.opacity = '0';
+                document.getElementById('loader').style.transform = 'translateY(-100%)';
+                
                 setTimeout(() => {
-                    document.getElementById('loadingScreen').style.display = 'none';
-                    document.getElementById('mainContent').style.opacity = '1';
-                    document.getElementById('stemPath').classList.add('draw-anim');
-                    spawnFlowers();
-                }, 1000);
-            }, 2500);
+                    document.getElementById('main-stage').classList.add('show');
+                    document.getElementById('stem').classList.add('active-draw');
+                    
+                    // Kalp ve Yaprakları Sırayla Getir
+                    setTimeout(() => {
+                        document.getElementById('mainHeart').style.opacity = '1';
+                        document.querySelectorAll('.pro-heart').forEach(el => el.style.opacity = '1');
+                        document.querySelectorAll('.leaf-pro').forEach(el => el.style.opacity = '1');
+                    }, 1500);
+                }, 600);
+            }, 3000);
         });
 
-        function spawnFlowers() {
-            const symbols = ['🌸', '💠', '❄️', '✨'];
-            for(let i=0; i<15; i++) {
-                let f = document.createElement('div');
-                f.className = 'deco-flower';
-                f.innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                f.style.left = Math.random() * 100 + 'vw';
-                f.style.animationDelay = Math.random() * 5 + 's';
-                document.body.appendChild(f);
-            }
-        }
-        window.addEventListener('resize', initParticles);
+        window.addEventListener('resize', init);
     </script>
 </body>
 </html>
