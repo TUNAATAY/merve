@@ -2,30 +2,42 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Protocol: Merve_Final_Sequence</title>
+    <title>Protocol: Merve_DeepBlue_v4</title>
     <style>
-        /* CSS RESET & THEME */
+        /* HALVIOR OS - PROJECT: BLUE ZEN
+           DESIGN: ULTRA BLUE / NEON CYAN
+        */
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500&display=swap');
+
+        :root {
+            --deep-blue: #020b16;
+            --ocean-blue: #051c33;
+            --neon-cyan: #00f2ff;
+            --glow-blue: rgba(0, 242, 255, 0.4);
+            --heart-color: #00e5ff; /* Kalbi de mavi/cyan tonuna çektik */
+        }
+
         body, html {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
-            background: #02050a;
-            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--deep-blue);
+            background-image: radial-gradient(circle at center, var(--ocean-blue) 0%, var(--deep-blue) 100%);
+            font-family: 'Space Grotesk', sans-serif;
             overflow: hidden;
             color: white;
         }
 
-        /* Arka Plan Hareketli Tozlar */
         #particleCanvas {
             position: fixed;
             top: 0; left: 0;
             z-index: 1;
         }
 
-        /* 1. LOADING EKRANI */
+        /* --- 1. LOADING EKRANI --- */
         #loadingScreen {
             position: fixed;
             inset: 0;
-            background: #02050a;
+            background: var(--deep-blue);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -35,26 +47,20 @@
         }
 
         .loader-heart {
-            width: 120px;
-            height: 120px;
-            fill: #ff007f;
-            filter: drop-shadow(0 0 20px #ff007f);
-            animation: pulse 1s infinite alternate;
+            width: 100px;
+            height: 100px;
+            fill: var(--neon-cyan);
+            filter: drop-shadow(0 0 15px var(--neon-cyan));
+            animation: pulse 0.8s infinite alternate;
         }
 
-        .loading-text {
-            margin-top: 20px;
-            letter-spacing: 5px;
-            font-size: 1.2rem;
-            animation: flicker 1.5s infinite;
-        }
-
-        /* 2. ANA İÇERİK (ÇİÇEKLER VE KALPLİ ÇİÇEK) */
+        /* --- 2. ANA İÇERİK --- */
         #mainContent {
             position: relative;
             width: 100%;
             height: 100%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             opacity: 0;
@@ -63,56 +69,88 @@
         }
 
         /* Merkezi Kalpli Çiçek */
-        .heart-flower-svg {
-            width: 450px; /* Kalbi ve çiçeği büyüttük kral */
-            height: 600px;
-            filter: drop-shadow(0 0 30px rgba(0, 242, 255, 0.3));
+        .flower-container {
+            position: relative;
+            width: 400px;
+            height: 500px;
+            animation: sway 5s ease-in-out infinite;
+        }
+
+        .flower-svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
         }
 
         .stem {
             fill: none;
-            stroke: #00f2ff;
+            stroke: var(--neon-cyan);
             stroke-width: 4;
+            stroke-linecap: round;
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
         }
 
         .leaf {
-            fill: rgba(0, 242, 255, 0.2);
-            stroke: #00f2ff;
+            fill: rgba(0, 242, 255, 0.1);
+            stroke: var(--neon-cyan);
             stroke-width: 2;
             opacity: 0;
         }
 
+        /* KALBİ BURAYA SABİTLEDİK - ASLA KAYBOLMAZ */
         .main-heart {
             fill: none;
-            stroke: #ff007f;
+            stroke: var(--heart-color);
             stroke-width: 5;
-            filter: drop-shadow(0 0 25px #ff007f);
-            transform-origin: center;
-            opacity: 0;
+            filter: drop-shadow(0 0 20px var(--heart-color));
+            transform-origin: 200px 180px;
+            animation: heartbeat 2s infinite ease-in-out;
         }
 
-        /* Dekoratif Yan Çiçekler */
+        /* Yer Tutucu Yazı Alanı */
+        .message-box {
+            margin-top: 20px;
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .editable-text {
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            color: #8ab4f8;
+            border: 1px dashed rgba(255,255,255,0.1);
+            padding: 10px;
+            cursor: text;
+        }
+
+        /* Dekoratif Çiçekler */
         .deco-flower {
             position: absolute;
-            width: 100px;
-            height: 100px;
-            opacity: 0;
-            transition: all 1s ease;
+            font-size: 20px;
+            opacity: 0.3;
+            filter: blur(1px);
+            animation: float 10s infinite linear;
         }
 
         /* ANİMASYONLAR */
-        @keyframes pulse { to { transform: scale(1.2); } }
-        @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        
-        .animate-draw { animation: draw 3s forwards ease-out; }
-        .animate-fade { animation: fadeIn 2s forwards 2s; }
-        .animate-heart { animation: heartIn 2s forwards 3s, pulse 1.5s infinite 5s ease-in-out; }
-
+        @keyframes pulse { to { transform: scale(1.15); filter: brightness(1.3); } }
+        @keyframes heartbeat { 
+            0%, 100% { transform: scale(1); } 
+            50% { transform: scale(1.1); filter: brightness(1.5); } 
+        }
+        @keyframes sway {
+            0%, 100% { transform: rotate(-2deg) translateX(-5px); }
+            50% { transform: rotate(2deg) translateX(5px); }
+        }
+        @keyframes float {
+            from { transform: translateY(100vh) rotate(0deg); }
+            to { transform: translateY(-100vh) rotate(360deg); }
+        }
+        .draw-anim { animation: draw 3s forwards ease-out; }
         @keyframes draw { to { stroke-dashoffset: 0; } }
+        .fade-in { animation: fadeIn 2s forwards 2s; }
         @keyframes fadeIn { to { opacity: 1; } }
-        @keyframes heartIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
     </style>
 </head>
@@ -124,25 +162,29 @@
         <svg class="loader-heart" viewBox="0 0 32 32">
             <path d="M16,28.221c-0.34,0-0.671-0.134-0.916-0.378c-0.244-0.244-12.084-12.084-12.084-17.843c0-4.66,3.791-8.451,8.451-8.451 c1.666,0,3.284,0.485,4.66,1.401c1.376-0.916,2.994-1.401,4.66-1.401c4.66,0,8.451,3.791,8.451,8.451 c0,5.759-11.84,17.599-12.084,17.843C16.671,28.087,16.34,28.221,16,28.221z"/>
         </svg>
-        <div class="loading-text">YÜKLENİYOR...</div>
+        <p style="margin-top:20px; letter-spacing:3px;">SİSTEM YÜKLENİYOR...</p>
     </div>
 
     <div id="mainContent">
-        <svg class="heart-flower-svg" viewBox="0 0 400 600">
-            <path id="stemPath" class="stem" d="M200,600 C180,450 220,350 200,180" />
-            
-            <path class="leaf animate-fade" d="M198,480 Q120,440 110,500 Q160,520 198,490" />
-            <path class="leaf animate-fade" d="M202,380 Q290,340 300,400 Q250,420 202,390" />
-            
-            <g class="animate-heart">
-                <path class="main-heart" d="M200,180 C200,180 120,110 120,65 A40,40 0 0,1 200,30 A40,40 0 0,1 280,65 C280,110 200,180 200,180 Z" />
-                <path fill="none" stroke="rgba(255,0,127,0.3)" stroke-width="1" d="M200,180 L120,65 M200,180 L280,65 M200,30 L200,180" />
-            </g>
-        </svg>
+        <div class="flower-container">
+            <svg class="flower-svg" viewBox="0 0 400 600">
+                <path id="stemPath" class="stem" d="M200,600 C180,450 220,350 200,180" />
+                
+                <path class="leaf fade-in" d="M198,480 Q120,440 110,500 Q160,520 198,490" />
+                <path class="leaf fade-in" d="M202,380 Q290,340 300,400 Q250,420 202,390" />
+                
+                <path class="main-heart fade-in" d="M200,180 C200,180 120,110 120,65 A40,40 0 0,1 200,30 A40,40 0 0,1 280,65 C280,110 200,180 200,180 Z" />
+            </svg>
+        </div>
+
+        <div class="message-box fade-in">
+            <div class="editable-text" contenteditable="true">
+                BURAYA İSTEDİĞİN MESAJI YAZ PAŞAM (TIKLA VE DÜZENLE)
+            </div>
+        </div>
     </div>
 
     <script>
-        // 1. Toz Zerrecikleri Motoru
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let w, h, particles = [];
@@ -151,11 +193,9 @@
             w = canvas.width = window.innerWidth;
             h = canvas.height = window.innerHeight;
             particles = [];
-            for(let i=0; i<80; i++) particles.push({
-                x: Math.random() * w,
-                y: Math.random() * h,
-                s: Math.random() * 2,
-                v: Math.random() * 0.5 + 0.2,
+            for(let i=0; i<70; i++) particles.push({
+                x: Math.random() * w, y: Math.random() * h,
+                s: Math.random() * 2, v: Math.random() * 0.4 + 0.1,
                 o: Math.random()
             });
         }
@@ -163,59 +203,38 @@
         function drawParticles() {
             ctx.clearRect(0,0,w,h);
             particles.forEach(p => {
-                p.y -= p.v;
-                if(p.y < 0) p.y = h;
+                p.y -= p.v; if(p.y < 0) p.y = h;
                 ctx.fillStyle = `rgba(0, 242, 255, ${p.o})`;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.s, 0, Math.PI*2);
-                ctx.fill();
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
             });
             requestAnimationFrame(drawParticles);
         }
 
-        // 2. Yükleme ve Geçiş Mantığı
         window.addEventListener('load', () => {
             initParticles();
             drawParticles();
-
-            // 3 saniye sonra loading bitsin
             setTimeout(() => {
                 document.getElementById('loadingScreen').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('loadingScreen').style.display = 'none';
-                    startMainSequence();
+                    document.getElementById('mainContent').style.opacity = '1';
+                    document.getElementById('stemPath').classList.add('draw-anim');
+                    spawnFlowers();
                 }, 1000);
-            }, 3000);
+            }, 2500);
         });
 
-        function startMainSequence() {
-            const main = document.getElementById('mainContent');
-            main.style.opacity = '1';
-            
-            // Sapı çizmeye başla
-            document.getElementById('stemPath').classList.add('animate-draw');
-            
-            // Yanlara dekoratif çiçekler serpiştir
-            for(let i=0; i<12; i++) {
-                createDecoFlower();
+        function spawnFlowers() {
+            const symbols = ['🌸', '💠', '❄️', '✨'];
+            for(let i=0; i<15; i++) {
+                let f = document.createElement('div');
+                f.className = 'deco-flower';
+                f.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                f.style.left = Math.random() * 100 + 'vw';
+                f.style.animationDelay = Math.random() * 5 + 's';
+                document.body.appendChild(f);
             }
         }
-
-        function createDecoFlower() {
-            const div = document.createElement('div');
-            div.className = 'deco-flower';
-            div.innerHTML = '🌸'; // Basit çiçek ikonu
-            div.style.left = Math.random() * 90 + 'vw';
-            div.style.top = Math.random() * 90 + 'vh';
-            div.style.fontSize = (Math.random() * 20 + 10) + 'px';
-            document.getElementById('mainContent').appendChild(div);
-            
-            setTimeout(() => {
-                div.style.opacity = '0.4';
-                div.style.transform = `translateY(-${Math.random()*50}px) rotate(${Math.random()*360}deg)`;
-            }, 100);
-        }
-
         window.addEventListener('resize', initParticles);
     </script>
 </body>
